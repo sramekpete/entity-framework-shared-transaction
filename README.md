@@ -1,1 +1,1 @@
-# Implementation of shared transaction between two DbContexts
+# Sample implementation of sharing transacion between parent and child DbContext
