@@ -1,7 +1,7 @@
-﻿namespace DropoutCoder.EntityFramework.SharedTransaction
+﻿namespace EntityFramework.SharedTransaction
 {
-    using DropoutCoder.EntityFramework.SharedTransaction.Database;
-    using DropoutCoder.EntityFramework.SharedTransaction.Database.Schema;
+    using EntityFramework.SharedTransaction.Database;
+    using EntityFramework.SharedTransaction.Database.Schema;
     using System;
     using System.Data;
     using System.Data.Entity;
@@ -9,7 +9,7 @@
 
     internal class Program
     {
-        static async Task Main(string[] args)
+        static async Task Main(string[] _)
         {
 
             using (var parentContext = new DatabaseContext(DatabaseContext.ConnectionString))

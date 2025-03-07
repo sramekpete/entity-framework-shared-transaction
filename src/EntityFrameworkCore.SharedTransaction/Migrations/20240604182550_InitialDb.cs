@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace DropoutCoder.EntityFrameworkCore.SharedTransaction.Migrations
+namespace EntityFrameworkCore.SharedTransaction.Migrations
 {
     /// <inheritdoc />
     public partial class InitialDb : Migration

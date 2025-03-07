@@ -1,6 +1,6 @@
-﻿namespace DropoutCoder.EntityFramework.SharedTransaction.Database
+﻿namespace EntityFramework.SharedTransaction.Database
 {
-    using DropoutCoder.EntityFramework.SharedTransaction.Database.Schema;
+    using EntityFramework.SharedTransaction.Database.Schema;
     using System.Data.Common;
     using System.Data.Entity;
 

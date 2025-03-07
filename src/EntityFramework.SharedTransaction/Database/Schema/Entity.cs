@@ -1,4 +1,4 @@
-﻿namespace DropoutCoder.EntityFramework.SharedTransaction.Database.Schema
+﻿namespace EntityFramework.SharedTransaction.Database.Schema
 {
     public class Entity
     {
