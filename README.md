@@ -2,14 +2,12 @@
 
 Sample implementation of sharing transaction between two instances of the same DBContext for EntityFramework and EntityFrameworkCore.
 
-## EntityFramework 
+## EntityFramework
+
+Using older EntityFramework you can achieve transaction sharing by creating new transaction using initial DbContext, reusing `DbConnection` to initialize new `DbContext` and subsequently calling `UseTransaction` method to instruct `Database` to use desired transaction.
 
 ```csharp
 using (var parentContext = new DatabaseContext("...connection string...")) {
-    if (parentContext.Database.CreateIfNotExists()) {
-        parentContext.Database.Initialize(true);
-    }
-
     // Create transaction calling BeginTransaction method
     using (var transaction = parentContext.Database.BeginTransaction(IsolationLevel.ReadCommitted)) {
         var parent = new Entity() { Name = Guid.NewGuid().ToString() };
@@ -22,6 +20,7 @@ using (var parentContext = new DatabaseContext("...connection string...")) {
 
         // Create child DbContext using existing database connection without disposing it by passing false as contextOwnsConnection parameter
         using (var childContext = new DatabaseContext(parentContext.Database.Connection, contextOwnsConnection: false)) {
+            // Instruct DbContext to use existing transaction
             childContext.Database.UseTransaction(transaction.UnderlyingTransaction);
 
             var reloaded = await childContext.Set<Entity>().SingleOrDefaultAsync(e => e.Id == entityId);
@@ -37,20 +36,19 @@ using (var parentContext = new DatabaseContext("...connection string...")) {
 }
 ```
 
+### Related info
+
+[Connection management - EF6](https://learn.microsoft.com/en-us/ef/ef6/fundamentals/connection-management)
+
 ## EntityFrameworkCore
 
 ```csharp
 var parentOptions = new DbContextOptionsBuilder()
-            .UseSqlServer(DatabaseContext.ConnectionString)
+            .UseSqlServer("...connection string...")
             .Options;
 
 using (var parentContext = new DatabaseContext(parentOptions))
 {
-    if (parentContext.Database.GetPendingMigrations().Any())
-    {
-        await parentContext.Database.MigrateAsync();
-    }
-
     using (var transaction = parentContext.Database.BeginTransaction(IsolationLevel.ReadCommitted)) {
         var initial = new Entity() { Name = Guid.NewGuid().ToString() };
 
